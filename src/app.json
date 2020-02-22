@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/main",
     "pages/logs/main",
-    "pages/counter/main"
+    "pages/counter/main",
+    "pages/details/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -55,7 +56,9 @@
     "van-panel": "../static/vant/panel/index",
     "van-swipe-cell": "../static/vant/swipe-cell/index",
     "van-image": "../static/vant/image/index",
-    "van-icon": "../static/vant/icon/index"
+    "van-icon": "../static/vant/icon/index",
+    "van-divider": "../static/vant/divider/index",
+    "van-field": "../static/vant/field/index"
 
   }
 }
