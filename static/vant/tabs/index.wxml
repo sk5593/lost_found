@@ -43,9 +43,6 @@
       </scroll-view>
       <slot name="nav-right" />
     </view>
-    <van-search
-      shape="round"
-      background></van-search>
   </van-sticky>
 
   <view

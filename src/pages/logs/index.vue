@@ -46,10 +46,6 @@ export default {
     this.logs = logs.map(log => formatTime(new Date(log)))
   },
   methods: {
-    onPullDownRefresh () {
-      wx.showNavigationBarLoading()
-      console.log(1111)
-    }
   }
 }
 </script>

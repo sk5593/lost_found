@@ -4,6 +4,7 @@ VantComponent({
     field: true,
     classes: ['input-class', 'right-icon-class'],
     props: {
+        cellBorder: Boolean,
         size: String,
         icon: String,
         label: String,

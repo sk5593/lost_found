@@ -12,6 +12,8 @@
     name="{{ icon }}"
     class="van-cell__left-icon-wrap"
     custom-class="van-cell__left-icon"
+    color="{{ iconColor }}"
+    size="{{ iconSize }}"
   />
   <slot wx:else name="icon" />
 

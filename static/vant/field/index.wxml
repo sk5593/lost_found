@@ -13,6 +13,7 @@
   custom-style="{{ customStyle }}"
   arrow-direction="{{ arrowDirection }}"
   custom-class="van-field"
+  border="{{cellBorder}}"
 >
   <slot name="left-icon" slot="icon" />
   <slot name="label" slot="title" />

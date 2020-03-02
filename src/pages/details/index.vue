@@ -1,5 +1,12 @@
 <template>
     <div class="details">
+      <nav-Bar
+        extClass="details-nav-bar"
+        back
+        home
+        searchBar
+        searchText="输入关键词搜索"
+      />
       <van-row>
         <van-col span="3">
           <div style="padding-top: 4px">
@@ -54,11 +61,19 @@
           </van-col>
         </van-row>
       </div>
-      <div style="height: 44px"></div>
+      <div style="height: 40px"></div>
       <div class="bottom">
         <van-field
-          placeholder="请输入用户名"
-        />
+          input-class="bottom-input"
+          placeholder="评论一句,前排打call！"
+          cursor-spacing="20"
+        >
+          <van-button icon="star-o" size="small" custom-style="min-width:10px;font-size:18px;padding:0px;border:none;margin-left:15px;padding-bottom:2px" slot="button" type="default" />
+        </van-field>
+
+      </div>
+      <div>
+        <van-button round type="info" custom-class="back" @click="back">回到首页</van-button>
       </div>
     </div>
 </template>
@@ -72,6 +87,12 @@
           current: 'https://img.yzcdn.cn/vant/cat.jpeg', // 当前显示图片的http链接
           urls: ['https://img.yzcdn.cn/vant/cat.jpeg', 'https://img.yzcdn.cn/vant/cat.jpeg', 'https://img.yzcdn.cn/vant/cat.jpeg'] // 需要预览的图片http链接列表
         })
+      },
+      collection () {
+        console.log(888)
+      },
+      back () {
+        wx.navigateBack()
       }
     },
     components: {shareAndComment}
@@ -80,7 +101,7 @@
 
 <style>
   .details {
-    margin: 4px 4px 4px 4px;
+    margin: 4px 8px 4px 8px;
   }
   .details .user-name {
     color: #4169E1;
@@ -104,5 +125,27 @@
     left: 0px;
     right: 0px;
     width: 100%;
+    height: 38px;
+    padding-bottom: 5px;
+    /*设置阴影*/
+    box-shadow: 10px 10px 2px 10px rgba(230,230,250,1);
+  }
+  .details .bottom-input {
+    background-color: lavender;
+    width: 38%;
+    /*输入框圆角*/
+    border-radius: 9px;
+    padding-left: 5px;
+    font-size: 13px;
+    text-align: center;
+  }
+  .details .back {
+    font-size: 11px;
+    position: fixed;
+    right: 5px;
+    top: 420px;
+    width: 11%;
+    padding: 0px 6px;
+    line-height: 1.5;
   }
 </style>
