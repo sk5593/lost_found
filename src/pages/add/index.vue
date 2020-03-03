@@ -2,8 +2,6 @@
   <div class="add">
     <nav-Bar
       title="发帖"
-      back
-      home
     />
     <van-field
       :cell-border=false
@@ -19,6 +17,7 @@
     <van-cell>
       <van-button type="info" custom-class="add-button">发布</van-button>
     </van-cell>
+    <van-overlay :show="overlayShow" />
   </div>
 </template>
 
@@ -26,7 +25,8 @@
     export default {
       data () {
         return {
-          fileList: []
+          fileList: [],
+          overlayShow: false
         }
       },
       methods: {
@@ -45,7 +45,31 @@
               this.setData({ fileList })
             }
           })
+        },
+        checkLogin () {
+          wx.getStorage({
+            key: 'session_key',
+            fail: (res) => {
+              if (res.errMsg === 'getStorage:fail data not found') {
+                //  用户退出登录或者没有登录
+                this.overlayShow = true
+                wx.navigateTo({
+                  url: '/pages/login/main'
+                })
+              }
+            },
+            success: (res) => {
+              this.overlayShow = false
+            }
+          })
         }
+      },
+      mounted () {
+        this.checkLogin()
+      },
+      onShow () {
+        // navigateBack后调用
+        this.checkLogin()
       }
     }
 </script>

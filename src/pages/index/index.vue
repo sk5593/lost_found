@@ -11,7 +11,7 @@
       placeholder="输入关键词搜索"
       shape="round">
     </van-search>
-    <div v-for="(count,key) in 10">
+    <div v-for="(data,key) in dataList" :key="key">
       <van-panel custom-class="panel-class" @click="detail">
         <div slot="header">
           <van-row>
@@ -27,11 +27,9 @@
               </div>
             </van-col>
             <van-col span="21">
-              <div class="user-name">不管我在何方朦胧</div>
+              <div class="user-name">{{data.user.name}}</div>
               <div class="content">
-                所有HTML元素可以看作盒子，在CSS中，"box model"这一术语是用来设计和布局时使用。
-                CSS盒模型本质上是一个盒子，封装周围的HTML元素，它包括：边距，边框，填充，和实际内容。
-                盒模型允许我们在其它元素和周围元素边框之间的空间放置元素
+                {{data.content}}
               </div>
               <div>
                 <!--.stop阻止父类点击事件-->
@@ -49,6 +47,7 @@
         </div>
       </van-panel>
     </div>
+    <van-divider v-if="end" contentPosition="center">我也是有底线的</van-divider>
   </div>
 </template>
 
@@ -59,12 +58,14 @@
   export default {
     data () {
       return {
-        motto: 'Hello miniprograme',
-        userInfo: {
-          nickName: 'mpvue',
-          avatarUrl: 'http://mpvue.com/assets/logo.png'
+        page: {
+          current: 1,
+          size: 10,
+          hasNextPage: false
         },
-        showTopLoading: false
+        dataList: [],
+        showTopLoading: false,
+        end: false
       }
     },
     // 声明组件
@@ -83,6 +84,25 @@
         wx.navigateTo({
           url: '/pages/details/main'
         })
+      },
+      getDataList () {
+        this.$fly.get(
+          '/index/index', {
+            current: this.page.current,
+            size: this.page.size
+          }
+        ).then(res => {
+          res.data.list.forEach(data => {
+            this.dataList.push(data)
+          })
+          if (res.data.hasNextPage) {
+            this.page.current = res.data.nextPage
+            this.page.hasNextPage = true
+          } else {
+            this.end = true
+            this.page.hasNextPage = false
+          }
+        })
       }
     },
     mounted () {
@@ -90,10 +110,7 @@
       wx.showShareMenu({
         withShareTicket: true
       })
-      this.$fly.get(
-        '/index/index'
-      ).then(res => {
-      })
+      this.getDataList()
     },
     onPullDownRefresh () {
       // this.showTopLoading = true
@@ -104,6 +121,18 @@
           }
         })
       }, 3000)
+    },
+    onReachBottom () {
+      if (this.page.hasNextPage) {
+        wx.showLoading({
+          title: '加载中',
+          mask: true
+        })
+        setTimeout(() => {
+          wx.hideLoading()
+        }, 1500)
+        this.getDataList()
+      }
     }
   }
 </script>
