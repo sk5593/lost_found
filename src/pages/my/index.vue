@@ -47,7 +47,6 @@
         // let success = () => {
         //   console.log(888)
         // }
-        this.$login()
         if (detail.mp.detail.errMsg === 'getUserInfo:ok') {
           Toast.success('登录成功')
           let userInfo = {
@@ -58,6 +57,7 @@
           userInfo.userName = detail.mp.detail.userInfo.nickName
           userInfo.userPhoto = detail.mp.detail.userInfo.avatarUrl
           store.commit('changeLoginState', userInfo)
+          this.$login()
         } else {
           Toast.fail('登录失败')
         }

@@ -22,7 +22,6 @@
         // let success = () => {
         //   console.log(888)
         // }
-        this.$login()
         if (detail.mp.detail.errMsg === 'getUserInfo:ok') {
           let userInfo = {
             userName: '',
@@ -32,6 +31,7 @@
           userInfo.userName = detail.mp.detail.userInfo.nickName
           userInfo.userPhoto = detail.mp.detail.userInfo.avatarUrl
           store.commit('changeLoginState', userInfo)
+          this.$login()
           Toast({
             type: 'success',
             message: '登录成功',

@@ -48,13 +48,14 @@
       </van-panel>
     </div>
     <van-divider v-if="end" contentPosition="center">我也是有底线的</van-divider>
+    <van-toast id="van-toast" />
   </div>
 </template>
 
 <script>
   // 导入自定义组件
+  import Toast from '../../../static/vant/toast/toast'
   import shareAndComment from '@/components/shareAndComment'
-
   export default {
     data () {
       return {
@@ -113,14 +114,21 @@
       this.getDataList()
     },
     onPullDownRefresh () {
-      // this.showTopLoading = true
-      setTimeout(() => {
+      let latestTime = this.dataList[0].createTime
+      console.log(latestTime)
+      this.$fly.get('/index/latest', {latestTime: latestTime}).then(res => {
+        let t = res.data.length
+        console.log(res.data.length)
+        res.data.forEach(data => {
+          this.dataList.splice(0, 0, data)
+        })
         wx.stopPullDownRefresh({
           success: () => {
-            // this.showTopLoading = false
+            Toast('为你更新' + t + '条信息')
           }
         })
-      }, 3000)
+      })
+      // this.showTopLoading = true
     },
     onReachBottom () {
       if (this.page.hasNextPage) {

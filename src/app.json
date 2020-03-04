@@ -71,9 +71,5 @@
     "van-notify": "../static/vant/notify/index",
     "van-loading": "../static/vant/loading/index",
     "van-overlay": "../static/vant/overlay/index"
-
-
-
-
   }
 }
