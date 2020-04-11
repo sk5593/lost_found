@@ -7,7 +7,6 @@ fly.config.baseURL = process.env.API_BASE_URL
 Vue.prototype.$fly = fly
 fly.interceptors.request.use((request) => {
   if (request.url !== '/user/login' && request.url !== '/index/index') {
-    request.headers['X-Tag'] = 'flyio'
     // 给所有请求添加自定义header
     try {
       let value = wx.getStorageSync('session_key')

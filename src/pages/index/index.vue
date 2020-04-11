@@ -12,36 +12,33 @@
       shape="round">
     </van-search>
     <div v-for="(data,key) in dataList" :key="key">
-      <van-panel custom-class="panel-class" @click="detail">
+      <van-panel custom-class="panel-class" @click="detail(data)">
         <div slot="header">
           <van-row>
             <van-col span="3">
-              <div style="padding-top: 4px">
-                <van-image
-                  width="40"
-                  height="40"
-                  radius="3"
-                  fit="cover"
-                  src="https://img.yzcdn.cn/vant/cat.jpeg"
+              <div style="margin-top: 6px">
+                <image
+                  style="width: 80rpx;height: 80rpx;border-radius: 10rpx"
+                  mode="widthFix"
+                  :src="data.user.image"
                 />
               </div>
             </van-col>
             <van-col span="21">
               <div class="user-name">{{data.user.name}}</div>
               <div class="content">
-                {{data.content}}
+                {{data.shortContent}}
               </div>
               <div>
                 <!--.stop阻止父类点击事件-->
-                <van-image
-                  width="100"
-                  height="100"
+                <image
+                  style="width: 200rpx;height: 200rpx;"
                   src="https://img.yzcdn.cn/vant/cat.jpeg"
-                  fit="cover"
+                  mode="widthFix"
                   @click.stop="imgShow"
                 />
               </div>
-              <share-and-comment/>
+              <share-and-comment :commentsNum="data.commentNum"/>
             </van-col>
           </van-row>
         </div>
@@ -81,18 +78,19 @@
         })
       },
       // 路由到详情
-      detail () {
+      detail (data) {
         wx.navigateTo({
-          url: '/pages/details/main'
+          url: '/pages/details/main?id=' + data.id
         })
       },
-      getDataList () {
+      getDataList (current, fun = () => {}) {
         this.$fly.get(
           '/index/index', {
-            current: this.page.current,
+            current: current,
             size: this.page.size
           }
         ).then(res => {
+          console.log(res)
           res.data.list.forEach(data => {
             this.dataList.push(data)
           })
@@ -103,32 +101,35 @@
             this.end = true
             this.page.hasNextPage = false
           }
+          fun()
+        }).catch(err => {
+          Toast('未知异常')
+          console.log(err)
+        })
+      },
+      getLatestData () {
+        let latestTime = this.dataList[0].createTime
+        this.$fly.get('/index/latest', {latestTime: latestTime}).then(res => {
+          let t = res.data.length
+          res.data.forEach(data => {
+            this.dataList.splice(0, 0, data)
+          })
+          wx.stopPullDownRefresh({
+            complete: () => {
+              Toast('为你更新' + t + '条信息')
+            }
+          })
+        }).catch(err => {
+          Toast('未知异常')
+          console.log(err)
         })
       }
     },
     mounted () {
       // 开启右上角的分享按钮
-      wx.showShareMenu({
-        withShareTicket: true
-      })
-      this.getDataList()
     },
     onPullDownRefresh () {
-      let latestTime = this.dataList[0].createTime
-      console.log(latestTime)
-      this.$fly.get('/index/latest', {latestTime: latestTime}).then(res => {
-        let t = res.data.length
-        console.log(res.data.length)
-        res.data.forEach(data => {
-          this.dataList.splice(0, 0, data)
-        })
-        wx.stopPullDownRefresh({
-          success: () => {
-            Toast('为你更新' + t + '条信息')
-          }
-        })
-      })
-      // this.showTopLoading = true
+      this.getLatestData()
     },
     onReachBottom () {
       if (this.page.hasNextPage) {
@@ -136,10 +137,22 @@
           title: '加载中',
           mask: true
         })
-        setTimeout(() => {
+        let hide = () => {
           wx.hideLoading()
-        }, 1500)
-        this.getDataList()
+        }
+        this.getDataList(this.page.current, hide())
+      }
+    },
+    onLoad (option) {
+      wx.showShareMenu({
+        withShareTicket: true
+      })
+      // 第一次打开执行
+      if (option.session === undefined || option.session === null) {
+        this.getDataList(1)
+      } else {
+        // 添加后跳转执行
+        this.getLatestData()
       }
     }
   }

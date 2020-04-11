@@ -7,11 +7,9 @@
       <van-row>
         <van-col span="4">
           <div>
-            <van-image
-              round
-              width="50"
-              height="50"
-              fit="cover"
+            <image
+              class="user-photo"
+              mode="widthFix"
               :src="userInfo.userPhoto"
             />
           </div>
@@ -23,7 +21,7 @@
         </van-col>
       </van-row>
     </div>
-    <div style="border-radius: 9px;background-color: white">
+    <div  style="border-radius: 5rpx;background-color: white">
       <van-cell-group>
         <van-cell icon="column"  icon-size="28px" icon-color="green" is-link title="我的帖子"  url="/pages/release/main"  />
         <van-cell icon="star" icon-size="28px" icon-color="yellow" is-link title="我的收藏" url="/pages/collect/main" />
@@ -132,8 +130,10 @@
 .my-nav-bar .lxy-nav-bar__inner {
   background-image: linear-gradient(to right, #8A2BE2 , #FF00FF)!important;
 }
-.my .van-image--round .van-image__img {
-  /*头像边框*/
+.my .user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   border: 2px solid white;
 }
 .my .van-cell {

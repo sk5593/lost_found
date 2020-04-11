@@ -51,8 +51,6 @@
               name: jsonObj.object
             }
             this.fileList.push(imgObj)
-            console.log(this.fileList)
-            // 上传完成需要更新 fileList
           }
         })
       },
@@ -78,14 +76,15 @@
           content: this.fieldValue,
           imgArr: this.fileList
         }).then((res) => {
-          console.log(res)
           if (res.data.code === 200) {
+            this.fieldValue = ''
+            this.fileList = []
             Toast({
               type: 'success',
               message: '发布成功',
               onClose: () => {
                 wx.reLaunch({
-                  url: '../index/main'
+                  url: '../index/main?session=' + wx.getStorageSync('session_key')
                 })
               }
             })
